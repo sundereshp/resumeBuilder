@@ -1,0 +1,33 @@
+.footer {
+  background-color: #092346; /* Match sidebar color */
+  padding: 10px; /* Add padding */
+  color: white; /* Optional text color */
+  text-align: center; /* Center text */
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  justify-content: center;
+}
+
+.footer-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 12px;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+  padding-left: 10px;
+}
+
+.footer-links a:hover {
+  opacity: 1;
+}
+
+.copyright {
+  margin-top: 8px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+}

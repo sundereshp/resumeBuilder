@@ -1,0 +1,29 @@
+.header {
+  background-color: #092346; /* Match sidebar color */
+  padding: 10px; /* Add padding */
+  color: white; /* Optional text color */
+  text-align: center; /* Center text */
+}
+
+.header h1 {
+  color: white;
+  margin: 0;
+  font-size: 20px;
+  text-align: center;
+}
+
+.logout-button {
+  margin-top: 15px;
+  padding: 8px 16px;
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: white;
+}

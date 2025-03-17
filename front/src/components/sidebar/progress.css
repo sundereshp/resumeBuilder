@@ -1,0 +1,40 @@
+.progress {
+    background-color: #092346; /* Match sidebar color */
+    padding: 5px; /* Reduce padding */
+    color: white; /* Optional text color */
+    height: auto; /* Allow height to adjust based on content */
+    margin: 5px 0; /* Add some margin to separate from other elements */
+}
+.progress-container {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 8px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+  
+.progress-label {
+    color: white;
+    font-size: 12px;
+}
+  
+.progress-bar-container {
+    flex: 1;
+    height: 6px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+    overflow: hidden;
+}
+  
+.progress-bar {
+    height: 100%;
+    background-color: #28ae97;
+    transition: width 0.3s ease;
+}
+  
+.progress-percentage {
+    color: white;
+    min-width: 35px;
+    font-size: 12px;
+}

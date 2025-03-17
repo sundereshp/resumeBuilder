@@ -1,0 +1,62 @@
+.stepper {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center the stepper */
+  padding: 10px;
+  gap: 10px;
+}
+
+.step-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 200px; /* Adjust width for spacing */
+}
+
+.step-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: lightgray; /* Default color */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+  position: relative;
+  z-index: 2;
+}
+
+/* Connect circles with a vertical line */
+.step-container:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 15px; /* Center the line */
+  top: 28px; /* Position below the circle */
+  width: 3px; /* Line width */
+  height: 40px; /* Line height */
+  background: white; /* Line color */
+  z-index: 1;
+}
+
+.step-label {
+  margin-left: 15px; /* Align parallel to the circle */
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+}
+
+/* Active step styling */
+.step-circle.active {
+  background-color: blue;
+}
+
+/* Completed step styling */
+.step-circle.completed {
+  background-color: green;
+}
+
+/* Ensure the last step does not have a line */
+.step-container:last-child::after {
+  display: none;
+}

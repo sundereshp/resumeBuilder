@@ -1,0 +1,230 @@
+.heading-container {
+  padding: 1.5rem;
+  max-width: 56rem;
+  margin: 0 auto;
+}
+
+.back-button {
+  color: #4B5563;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.back-button:hover {
+  color: #1F2937;
+}
+
+.form-header {
+  margin-bottom: 2rem;
+}
+
+.form-header h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1F2937;
+  margin-bottom: 0.5rem;
+}
+
+.form-header p {
+  color: #4B5563;
+}
+
+.required-note {
+  color: #6B7280;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.form-subrow {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.form-group {
+  width: 100%;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.5rem 0rem 0.5rem 0.75rem;
+  border: 1px solid #D1D5DB;
+  border-radius: 0.375rem;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.form-input:focus {
+  border-color: #7C3AED;
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.1);
+}
+
+.form-input::placeholder {
+  color: #9CA3AF;
+}
+
+.input-with-delete {
+  position: relative;
+  width: 100%;
+  margin-right: 1rem;
+}
+
+.input-with-delete input {
+  width: 100%;
+  padding-right: 2.5rem;
+}
+
+.delete-button {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #EF4444;
+  cursor: pointer;
+  padding: 0.25rem;
+  font-size: 1.25rem;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  z-index: 10;
+}
+
+.delete-button:hover {
+  opacity: 1;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+}
+
+.optional-button {
+  padding: 0.5rem 1rem;
+  background-color: white;
+  color: #7C3AED;
+  border: 1px solid #7C3AED;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.875rem;
+}
+
+.optional-button:hover {
+  background-color: #F5F3FF;
+}
+
+.skip-button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #7C3AED;
+  color: #7C3AED;
+  border-radius: 0.375rem;
+  background: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.skip-button:hover {
+  background-color: #F5F3FF;
+}
+
+.next-button {
+  padding: 0.5rem 1rem;
+  background-color: #7C3AED;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.next-button:hover {
+  background-color: #6D28D9;
+}
+
+.next-button:disabled,
+.skip-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #DC2626;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.additional-info {
+  margin-top: 2rem;
+}
+
+.additional-info h3 {
+  font-size: 1.125rem;
+  color: #374151;
+  margin-bottom: 1rem;
+}
+
+.link-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+}
+
+.link-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border: 1px solid #E5E7EB;
+  border-radius: 4rem;
+  background: white;
+  color: #374151;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin: 0;
+}
+
+.link-button:hover {
+  border-color: #7C3AED;
+  color: #7C3AED;
+  background-color: #F5F3FF;
+}
+
+.input-with-delete {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}

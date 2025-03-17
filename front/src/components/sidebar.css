@@ -1,0 +1,13 @@
+.sidebar {
+    
+    width: 250px; /* Fixed width */
+    height: 100%; /* Full height */
+    background-color: #092346; /* Set background color */
+    padding: 20px;
+    
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    
+    
+}
+
+

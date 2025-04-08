@@ -37,12 +37,11 @@ const SkillList = ({ text, setText }) => {
         "Vertical communication",
     ];
 
-    // And update the extractLines function for better HTML handling
+    // Improved extractLines function for better HTML handling
     const extractLines = (text) => {
         if (!text) return [];
 
         // First convert ReactQuill's HTML to text with proper line breaks
-        // ReactQuill wraps content in <p> tags or uses <br> for line breaks
         let processedText = text;
 
         // Replace paragraph tags with newlines
@@ -117,20 +116,25 @@ const SkillList = ({ text, setText }) => {
         setNextCustomId(newCustomSkills.length);
     };
 
-    // Helper function to ensure text ends with newline
-    const ensureNewline = (currentText) => {
-        // If text is empty, just return empty string
-        if (currentText === "") {
-            return currentText;
+    // Improved helper function to ensure proper HTML structure for ReactQuill
+    const appendToQuillText = (currentText, newContent) => {
+        if (!currentText || currentText === "") {
+            // If text is empty, wrap the new content in <p> tags for ReactQuill
+            return `<p>${newContent}</p>`;
         }
-
-        // If the last character isn't a newline, add one
-        if (!currentText.endsWith('\n')) {
-            return currentText + '\n';
+        
+        // Check if the current text already ends with a proper block element
+        const hasProperEnding = currentText.trim().endsWith('</p>') || 
+                                currentText.trim().endsWith('</div>');
+        
+        if (hasProperEnding) {
+            // If it ends properly, add a new paragraph
+            return `${currentText}<p>${newContent}</p>`;
+        } else {
+            // If not, try to close any open tags and add a new paragraph
+            // This is a simple approach - for more complex cases a proper HTML parser would be better
+            return `${currentText}</p><p>${newContent}</p>`;
         }
-
-        // Text already ends with newline
-        return currentText;
     };
 
     // Handle adding or removing predefined skills
@@ -142,8 +146,8 @@ const SkillList = ({ text, setText }) => {
         if (willBeSelected) {
             // Add the skill to text editor if it's not already there
             if (!textLines.includes(skillName)) {
-                // Ensure there's a newline before adding the new skill
-                const newText = text === "" ? skillName : ensureNewline(text) + skillName;
+                // Use the improved function to ensure proper HTML structure
+                const newText = appendToQuillText(text, skillName);
 
                 setText(newText);
                 setPreviousText(newText);
@@ -167,7 +171,9 @@ const SkillList = ({ text, setText }) => {
         } else {
             // Remove the skill from text editor
             const updatedLines = textLines.filter(line => line !== skillName);
-            const newText = updatedLines.join('\n');
+            
+            // Reconstruct the text for ReactQuill using proper HTML
+            const newText = updatedLines.map(line => `<p>${line}</p>`).join('');
 
             setText(newText);
             setPreviousText(newText);
@@ -204,13 +210,15 @@ const SkillList = ({ text, setText }) => {
                 : line
         );
 
-        const newText = updatedLines.join('\n');
+        // Reconstruct the text properly for ReactQuill
+        const newText = updatedLines.map(line => `<p>${line}</p>`).join('');
+        
         setText(newText);
         setPreviousText(newText);
         setTextLines(updatedLines);
     };
 
-    // Handle custom skill name changes
+    // Improved handle custom skill name changes
     const handleCustomSkillChange = (id, newName) => {
         setIsAddingNewSkill(true);
 
@@ -234,24 +242,17 @@ const SkillList = ({ text, setText }) => {
                 line === oldName ? newName : line
             );
 
-            const newText = updatedLines.join('\n');
+            // Reconstruct the text properly for ReactQuill
+            const newText = updatedLines.map(line => `<p>${line}</p>`).join('');
+            
             setText(newText);
             setPreviousText(newText);
             setTextLines(updatedLines);
         }
-        // If it's a new skill with content, add it to the editor on a new line
+        // If it's a new skill with content, add it to the editor
         else if (newName && !textLines.includes(newName)) {
             // Only add to text if it has a name and is not already in text
-            // Make sure we add on a new line
-            // Check if text is empty, has content without ending newline, or already ends with newline
-            let newText;
-            if (text === "") {
-                newText = newName;
-            } else if (text.endsWith('\n')) {
-                newText = text + newName;
-            } else {
-                newText = text + '\n' + newName;
-            }
+            const newText = appendToQuillText(text, newName);
 
             setText(newText);
             setPreviousText(newText);
@@ -303,7 +304,9 @@ const SkillList = ({ text, setText }) => {
             line !== skill && line !== editableSkills[skill]
         );
 
-        const newText = updatedLines.join('\n');
+        // Reconstruct the text properly for ReactQuill
+        const newText = updatedLines.map(line => `<p>${line}</p>`).join('');
+        
         setText(newText);
         setPreviousText(newText);
         setTextLines(updatedLines);
@@ -338,8 +341,10 @@ const SkillList = ({ text, setText }) => {
         // Remove from text editor
         if (skillToDelete.name) {
             const updatedLines = textLines.filter(line => line !== skillToDelete.name);
-            const newText = updatedLines.join('\n');
-
+            
+            // Reconstruct the text properly for ReactQuill
+            const newText = updatedLines.map(line => `<p>${line}</p>`).join('');
+            
             setText(newText);
             setPreviousText(newText);
             setTextLines(updatedLines);
@@ -367,6 +372,13 @@ const SkillList = ({ text, setText }) => {
 
         // Force skills tab to be active
         setActiveTab("skills");
+
+        // Auto-focus the new input after rendering
+        setTimeout(() => {
+            if (newSkillInputRef.current) {
+                newSkillInputRef.current.focus();
+            }
+        }, 50);
 
         // Keep flag active for a while to avoid sync issues
         setTimeout(() => {

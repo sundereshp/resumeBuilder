@@ -53,7 +53,18 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS heading (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );''')
 conn.commit()
-
+cursor.execute('''CREATE TABLE IF NOT EXISTS education (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id VARCHAR(255) NOT NULL,
+    institution VARCHAR(255),
+    degree VARCHAR(255),
+    field_of_study VARCHAR(255),
+    start_year INT,
+    end_year INT,
+    description TEXT
+);
+''')
+conn.commit()
 @app.route('/signup', methods=['POST'])
 def signup():
     data = request.json
@@ -128,6 +139,41 @@ def save_heading():
     except Exception as e:
         print('Error:', str(e))
         return jsonify({'error': 'Failed to save data'}), 500
+@app.route('/education', methods=['POST'])
+def save_education():
+    try:
+        data = request.json
+        section = data.get('section')
+
+        # Ensure section is 'education'
+        if section != 'education':
+            return jsonify({'error': 'Invalid section'}), 400
+
+        form_data = data.get('data', {})
+        user_id = form_data.get('userId')
+
+        sql = """INSERT INTO education \
+                 (user_id, institution, degree, field_of_study, start_year, end_year, description) \
+                 VALUES (%s, %s, %s, %s, %s, %s, %s)"""
+
+        values = (
+            user_id,
+            form_data.get('institution', ''),
+            form_data.get('degree', ''),
+            form_data.get('fieldOfStudy', ''),
+            form_data.get('startYear', None),
+            form_data.get('endYear', None),
+            form_data.get('description', '')
+        )
+
+        cursor.execute(sql, values)
+        conn.commit()
+
+        return jsonify({'message': 'Education data saved successfully'}), 201
+
+    except Exception as e:
+        print('Error:', str(e))
+        return jsonify({'error': 'Failed to save education data'}), 500
   
 if __name__ == '__main__':
     app.run(debug=True)

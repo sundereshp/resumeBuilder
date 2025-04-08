@@ -1,0 +1,63 @@
+.back-button {
+            
+    padding: 10px 15px;
+    
+    cursor: pointer;
+    font-size: 14px;
+    color: #374151;
+    margin-bottom: 20px;
+  }
+
+  .heading {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #051e41;
+  }
+
+  .sub-heading {
+    font-size: 1.5rem;
+    color: #051e41;
+    margin-bottom: 15px;
+  }
+
+  .Preview-button, .Next-button {
+    font-size: 14px;
+    color: #374151;
+    cursor: pointer;
+    padding: 10px 15px;
+    border: 1px solid #374151;
+    border-radius: 10px;
+    background-color: transparent;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .Preview-button:hover {
+    background-color: #092147;
+    color: white;
+  }
+  .Next-button:hover {
+    background-color: #287149;
+    color: white;
+  }  
+
+  .description {
+    font-size: 16px;
+    color: #112855;
+    line-height: 1.5;
+  }
+  .flex-container {
+    display: flex;
+    margin-top:auto;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+  }
+  .container {
+    max-width: auto;
+    margin-left: 20px;
+    padding: 10px;
+    height: auto;
+    min-height: 100%;
+  }
+
+  

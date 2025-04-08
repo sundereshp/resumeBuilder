@@ -1,0 +1,76 @@
+/* Container Styling */
+.page-title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    width: 100%;
+}
+
+.left-container{
+    width: 50%;
+}
+.right-container{
+    width: 50%;
+}
+.title {
+    width: 75%; /* Ensures the title takes up 75% of parent container */
+}
+
+.title h1 {
+    font-family: "Domine", Georgia, serif;
+    font-size: 1.5rem;
+    color: #002d6b;
+    font-weight: 700;
+    margin-bottom: 10px; /* Add spacing between the title and description */
+}
+
+/* Description Styling */
+.description {
+    font-size: 1rem; /* Adjusted for consistency */
+    color: #112855;
+    line-height: 1.5;
+    font-weight: normal;
+    width: 100%;
+    margin-top: 5px;
+}
+
+/* Tips Section */
+.tips h2 {
+    font-size: 1.25rem;
+    color: #002d6b;
+    font-weight: 600;
+}
+
+/* Buttons Container */
+.flex-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* Button Styling */
+.back-button, .Preview-button, .Next-button {
+    padding: 10px 15px;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* Specific Button Colors */
+.back-button {
+    background-color: #ddd;
+    color: #333;
+}
+
+.Preview-button {
+    background-color: #f5a623;
+    color: white;
+}
+
+.Next-button {
+    background-color: #002d6b;
+    color: white;
+}

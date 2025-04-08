@@ -1,26 +1,64 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css"; // Import Quill styles
 
-const AdditionalCoursework = () => {
+
+const AdditionalCoursework = ({ text, setText }) => {
     const [isExpanded, setIsExpanded] = useState(false);
-    const [expandedCards, setExpandedCards] = useState({}); // Object to track multiple expanded courses
-    const [selectedSubCourses, setSelectedSubCourses] = useState({}); // Track sub-course selection
-
-    const toggleExpansion = () => {
-        setIsExpanded(!isExpanded);
+    const [expandedCards, setExpandedCards] = useState({}); // Tracks expanded courses
+    const [selectedSubCourses, setSelectedSubCourses] = useState({}); // Tracks selected sub-courses
+    const quillRef = useRef(null); // Create a ref for Quill
+    
+    const formats = ["bold", "italic", "underline", "list", "bullet"];
+    const modules = {
+        toolbar: "#quill-toolbar", // Use external toolbar
     };
+
+    const toggleExpansion = () => setIsExpanded((prev) => !prev);
 
     const toggleCard = (index) => {
         setExpandedCards((prev) => ({
             ...prev,
-            [index]: !prev[index], // Toggle only the clicked course
+            [index]: !prev[index] // Toggle only the clicked course
         }));
     };
 
+    const getSubCourseSentence = (subCourse) => {
+        const courseSentences = {
+            "Course 1.1": "• Honours [Semester, Year]",
+            "Course 1.2": "• Advanced Mathematics [Fall 2022]",
+            "Course 2.1": "• Machine Learning Specialization [Spring 2023]",
+            "Course 2.2": "• Data Science and Statistics [Semester 5]",
+            "Course 3.1": "• Research Project on AI Ethics [Winter 2022]",
+            "Course 3.2": "• Cloud Computing Essentials [Semester 6]",
+            "Course 4.1": "• Game Development with Unity [Spring 2024]",
+            "Course 4.2": "• Computer Graphics and Animation [Fall 2023]",
+            "Course 5.1": "• Blockchain Fundamentals [Semester 7]",
+            "Course 5.2": "• Cryptography and Security [Winter 2023]",
+            "Course 6.1": "• Internet of Things (IoT) [Semester 8]",
+            "Course 6.2": "• Cybersecurity Principles [Fall 2024]",
+            "Course 7.1": "• Quantum Computing Basics [Spring 2025]",
+            "Course 7.2": "• Bioinformatics and Computational Biology [Semester 9]",
+        };
+        return courseSentences[subCourse] || "";
+    };
+
     const handleAddCourse = (subCourse) => {
-        setSelectedSubCourses((prev) => ({
-            ...prev,
-            [subCourse]: !prev[subCourse], // Toggle selection
-        }));
+        const sentence = getSubCourseSentence(subCourse);
+
+        setSelectedSubCourses((prev) => {
+            const newSelection = { ...prev, [subCourse]: !prev[subCourse] };
+
+            setText((prevText) => {
+                if (newSelection[subCourse]) {
+                    return prevText.includes(sentence) ? prevText : `${prevText}\n${sentence}`.trim();
+                } else {
+                    return prevText.replace(sentence, "").replace(/\n\n/g, "\n").trim();
+                }
+            });
+
+            return newSelection;
+        });
     };
 
     const buttons = [
@@ -71,6 +109,7 @@ const AdditionalCoursework = () => {
                                                     <div key={subIndex} className="sub-course-card">
                                                         <button
                                                             className="add-btn"
+                                                            type="button"
                                                             style={{
                                                                 background: selectedSubCourses[subCourse] ? "grey" : "#064284",
                                                             }}
@@ -89,12 +128,38 @@ const AdditionalCoursework = () => {
                         </div>
                         <div className="text-box">
                             <h3>Education Description</h3>
-                            
+
+                            {/* Single Toolbar Used by All Quill Editors */}
+                            <div id="quill-toolbar">
+                                <span className="ql-formats">
+                                    <button className="ql-bold"></button>
+                                    <button className="ql-italic"></button>
+                                    <button className="ql-underline"></button>
+                                </span>
+                                <span className="ql-formats">
+                                    <button className="ql-list" value="ordered"></button>
+                                    <button className="ql-list" value="bullet"></button>
+                                </span>
+                                <span className="ql-formats">
+                                    <button className="ql-clean"></button>
+                                </span>
+                            </div>
+
+                            {/* ReactQuill Editor */}
+                            <ReactQuill
+                                ref={quillRef} // Attach the ref
+                                value={text} // Use the text from props
+                                onChange={(value) => {
+                                    setText(value); // Update the text state in EducationSection
+                                }}
+                                modules={modules} // Use the single toolbar
+                                formats={formats}
+                                theme="snow"
+                            />
                         </div>
                     </div>
                 </div>
             )}
-
             <style jsx>{`
                 .additional-coursework {
                     background: #fff;
@@ -214,6 +279,9 @@ const AdditionalCoursework = () => {
                 .button-card:hover {
                     background: #d3e6ff;
                 }
+                .ql-container {
+                    min-height: 120px;
+                }
 
                 .sub-courses {
                     margin-top: 5px;
@@ -249,5 +317,4 @@ const AdditionalCoursework = () => {
         </div>
     );
 };
-
 export default AdditionalCoursework;

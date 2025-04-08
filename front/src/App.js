@@ -7,8 +7,8 @@ import DashboardLayout from './dashboard';
 import Heading from './components/main/Heading'
 import StartBuilding from './startbuilding'
 import Education from './components/main/Education'
+import Skills from './components/main/skills'
 // import Experience from './components/main/Experience'
-// import Skills from './components/main/Skills'
 // import Summary from './components/main/Summary'
 // import Finalize from './components/main/Finalize'
 const App = () => {
@@ -42,6 +42,7 @@ const App = () => {
           <Route path="" element={<StartBuilding />} />
           <Route path="heading" element={<Heading />} />
           <Route path="education/*" element={<Education />} />
+          <Route path="skills/*" element={<Skills />} />
           {/* Other routes */}
         </Route>
 

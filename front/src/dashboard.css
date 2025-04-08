@@ -9,4 +9,6 @@
     padding: 20px; /* Add padding */
     background-color: #ffffff; /* White background for main content */
     height: 100%;
+    min-height: 100vh;
+    height:auto;
 }

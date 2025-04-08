@@ -1,49 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import AdditionalCoursework from "./section/addiional";
-// Refactored function to improve readability and functionality
-function fetchEducationData(isNewEntry, id, userEmail, formData) {
-    try {
-        // Fetch data from the API
-        const url = isNewEntry
-            ? "http://localhost:5000/api/education"
-            : `http://localhost:5000/api/education/${id}`;
-
-        const method = isNewEntry ? "POST" : "PUT";
-
-        const response = fetch(url, {
-            method: method,
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                ...formData,
-                email: userEmail
-            })
-        });
-
-        return response;
-    } catch (error) {
-        console.error('Error fetching education data:', error);
-        return null;
-    }
-}
-
-// Refactored function to improve readability and functionality
-function handleSubmit(isNewEntry, id, userEmail, formData, navigate) {
-    try {
-        const response = fetchEducationData(isNewEntry, id, userEmail, formData);
-        if (response.ok) {
-            navigate("/dashboard/education/summary");
-        } else {
-            const data = response.json();
-            throw new Error(data.error || "Failed to save education details");
-        }
-    } catch (error) {
-        console.error('Error saving education details:', error);
-        throw error;
-    }
-}
+import axios from "axios";
 
 // Component rendering
 const EducationSection = () => {
@@ -52,6 +10,8 @@ const EducationSection = () => {
     const location = useLocation();
     const isNewEntry = !id;
 
+    const [loading, setLoading] = useState(false);
+    
     const [formData, setFormData] = useState({
         school_name: "",
         school_location: "",
@@ -60,6 +20,8 @@ const EducationSection = () => {
         graduation_month: "",
         graduation_year: "",
     });
+
+    const [text, setText] = useState(""); // Moved text state here
 
     const [error, setError] = useState(null);
 
@@ -79,14 +41,56 @@ const EducationSection = () => {
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
+        setError(null);
+      
         const userEmail = localStorage.getItem("email");
-
+        const userId = localStorage.getItem("userId"); // Assuming userId is stored in localStorage
+      
         try {
-            await handleSubmit(isNewEntry, id, userEmail, formData, navigate);
+          console.log("Submitting education data:", formData);
+      
+          const response = await axios.post(
+            "http://localhost:5000/education",
+            {
+              section: "education",
+              data: {
+                userId, // Include userId
+                institution: formData.school_name,
+                degree: formData.degree,
+                fieldOfStudy: formData.field_of_study,
+                startYear: formData.graduation_year,
+                endYear: formData.graduation_month,
+                description: text, // Include the text from AdditionalCoursework
+              },
+            },
+            {
+              withCredentials: true,
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+      
+          if (response.status === 201) {
+            console.log("Education data submitted successfully!");
+            alert("Education details submitted successfully!");
+            navigate("/dashboard/education/summary"); // Navigate after successful submission
+          } else {
+            console.warn("Unexpected response:", response);
+            setError("Unexpected error occurred!");
+          }
         } catch (error) {
-            setError(error.message);
+          console.error("Error submitting education data:", error);
+          setError(
+            error.response?.data?.error ||
+              "Error submitting education data. Please try again."
+          );
+        } finally {
+          setLoading(false);
         }
-    };
+      };
+      
 
     return (
         <div className="education-section">
@@ -185,20 +189,17 @@ const EducationSection = () => {
                         </div>
                     </div>
                 </div>
-
+                <div className="additioanal-courwork">
+                    <AdditionalCoursework text={text} setText={setText} />
+                </div>
                 <div className="button-group">
                     <button type="button" onClick={() => navigate("/dashboard/education/summary")}>
                         Cancel
                     </button>
                     <button type="submit">{isNewEntry ? "Add Education" : "Save Changes"}</button>
                 </div>
-
-
-                {/* ... */}
             </form>
-            <div className="additioanal-courwork">
-                <AdditionalCoursework />
-            </div>
+
             <style jsx>{`
                 .education-section {
                     width: calc(100% - 250px);
@@ -243,6 +244,7 @@ const EducationSection = () => {
                 }
 
                 .button-group {
+                    margin-top: 20px;
                     display: flex;
                     justify-content: flex-end;
                 }

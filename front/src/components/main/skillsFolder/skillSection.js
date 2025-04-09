@@ -6,8 +6,8 @@ import SkillList from './skillListFolder/skillList';
 const SkillSection = () => {
   const navigate = useNavigate();
   const handleBack = () => navigate('/dashboard/skills/tips');
-  const handleNext = () => navigate('/dashboard/skills/summary');
-  const handlePreview = () => navigate('/dashboard/skills/summary');
+  const handleNext = () => navigate('/dashboard/summary/tips');
+  const handlePreview = () => navigate('/dashboard/summary/tips');
 
   const [text, setText] = useState("");
   const [selectedSkills, setSelectedSkills] = useState([]);   

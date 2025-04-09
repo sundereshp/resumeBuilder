@@ -1,5 +1,5 @@
 .sidebar {
-    
+    position:fixed;
     width: 250px; /* Fixed width */
     height: auto; /* Full height */
     background-color: #092346; /* Set background color */

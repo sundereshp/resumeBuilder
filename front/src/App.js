@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 import Signup from './credentials/Signup';
@@ -8,16 +8,16 @@ import Heading from './components/main/Heading'
 import StartBuilding from './startbuilding'
 import Education from './components/main/Education'
 import Skills from './components/main/skills'
-// import Experience from './components/main/Experience'
-// import Summary from './components/main/Summary'
-// import Finalize from './components/main/Finalize'
+import Summary from './components/main/Summary';
+import Final from './components/main/final';
+
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const storedIsAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
     setIsAuthenticated(storedIsAuthenticated);
-  }, []);
+  }, [setIsAuthenticated]);
 
   const handleLoginSuccess = () => {
     localStorage.setItem('isAuthenticated', 'true');
@@ -43,6 +43,9 @@ const App = () => {
           <Route path="heading" element={<Heading />} />
           <Route path="education/*" element={<Education />} />
           <Route path="skills/*" element={<Skills />} />
+          <Route path="summary/*" element={<Summary />} />
+          <Route path="finalize/*" element={<Final />} />
+
           {/* Other routes */}
         </Route>
 

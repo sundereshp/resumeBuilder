@@ -53,6 +53,7 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS heading (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );''')
 conn.commit()
+
 cursor.execute('''CREATE TABLE IF NOT EXISTS education (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id VARCHAR(255) NOT NULL,
@@ -65,6 +66,18 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS education (
 );
 ''')
 conn.commit()
+
+# Create skills table if it doesn't exist
+cursor.execute('''CREATE TABLE IF NOT EXISTS skills (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id VARCHAR(255) NOT NULL,
+    skill_name VARCHAR(255) NOT NULL,
+    skill_rating INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+''')
+conn.commit()
+
 @app.route('/signup', methods=['POST'])
 def signup():
     data = request.json
@@ -139,6 +152,7 @@ def save_heading():
     except Exception as e:
         print('Error:', str(e))
         return jsonify({'error': 'Failed to save data'}), 500
+
 @app.route('/education', methods=['POST'])
 def save_education():
     try:
@@ -174,6 +188,48 @@ def save_education():
     except Exception as e:
         print('Error:', str(e))
         return jsonify({'error': 'Failed to save education data'}), 500
-  
+
+@app.route('/skills', methods=['POST'])
+def save_skills():
+    try:
+        data = request.json
+        section = data.get('section')
+
+        # Ensure section is 'skills' before proceeding
+        if section != 'skills':
+            return jsonify({'error': 'Invalid section'}), 400
+
+        form_data = data.get('data', {})
+        user_id = form_data.get('userId')
+        
+        # Get the skills array from the form data
+        skills = form_data.get('skills', [])
+        
+        if not skills:
+            return jsonify({'error': 'No skills provided'}), 400
+            
+        # Insert each skill with its rating
+        for skill_data in skills:
+            skill_name = skill_data.get('name', '')
+            skill_rating = skill_data.get('rating', 0)
+            
+            if not skill_name:
+                continue
+                
+            sql = """INSERT INTO skills 
+                     (user_id, skill_name, skill_rating) 
+                     VALUES (%s, %s, %s)"""
+                     
+            values = (user_id, skill_name, skill_rating)
+            
+            cursor.execute(sql, values)
+        
+        conn.commit()
+        return jsonify({'message': 'Skills saved successfully'}), 201
+
+    except Exception as e:
+        print('Error:', str(e))
+        return jsonify({'error': 'Failed to save skills data'}), 500
+        
 if __name__ == '__main__':
     app.run(debug=True)

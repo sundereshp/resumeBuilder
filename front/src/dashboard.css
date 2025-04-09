@@ -1,14 +1,21 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
 .dashboard-layout {
-    display: flex; /* Use flexbox for layout */
-    height: 100%; /* Full height of the viewport */
-    gap:6px;
+    display: flex;
+    height: 100%;
+    min-height: 100vh;
+    width: 100%;
+    gap: 6px;
+    overflow: hidden;
 }
 
 .main-content {
-    flex: 1; /* Take up the remaining space */
-    padding: 20px; /* Add padding */
-    background-color: #ffffff; /* White background for main content */
-    height: 100%;
+    flex: 1;
+    padding: 20px;
+    background-color: #ffffff;
     min-height: 100vh;
-    height:auto;
+    overflow-y: auto;
+    margin-left: 290px; /* Match sidebar width */
 }

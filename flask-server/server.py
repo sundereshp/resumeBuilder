@@ -166,8 +166,8 @@ def save_education():
         form_data = data.get('data', {})
         user_id = form_data.get('userId')
 
-        sql = """INSERT INTO education \
-                 (user_id, institution, degree, field_of_study, start_year, end_year, description) \
+        sql = """INSERT INTO education 
+                 (user_id, institution, degree, field_of_study, start_year, end_year, description) 
                  VALUES (%s, %s, %s, %s, %s, %s, %s)"""
 
         values = (

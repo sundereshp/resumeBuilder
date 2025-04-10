@@ -45,51 +45,65 @@ const EducationSection = () => {
         setError(null);
       
         const userEmail = localStorage.getItem("email");
-        const userId = localStorage.getItem("userId"); // Assuming userId is stored in localStorage
+        const userId = localStorage.getItem("userId");
       
         try {
-          console.log("Submitting education data:", formData);
+            const response = await axios.post(
+                "http://localhost:5000/education",
+                {
+                    section: "education",
+                    data: {
+                        userId,
+                        institution: formData.school_name,
+                        degree: formData.degree,
+                        fieldOfStudy: formData.field_of_study,
+                        startYear: formData.graduation_year,
+                        endYear: formData.graduation_month,
+                        description: text,
+                    },
+                },
+                {
+                    withCredentials: true,
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
       
-          const response = await axios.post(
-            "http://localhost:5000/education",
-            {
-              section: "education",
-              data: {
-                userId, // Include userId
-                institution: formData.school_name,
-                degree: formData.degree,
-                fieldOfStudy: formData.field_of_study,
-                startYear: formData.graduation_year,
-                endYear: formData.graduation_month,
-                description: text, // Include the text from AdditionalCoursework
-              },
-            },
-            {
-              withCredentials: true,
-              headers: {
-                "Content-Type": "application/json",
-              },
+            if (response.status === 201) {
+                console.log("Education data submitted successfully!");
+                alert("Education details submitted successfully!");
+    
+                // Get the selected sections from the location state
+                const selectedSections = location.state?.selectedSections || [];
+                
+                // Find the current section index
+                const currentIndex = selectedSections.indexOf('education');
+                
+                // If education is not the last section, navigate to next
+                if (currentIndex >= 0 && currentIndex < selectedSections.length - 1) {
+                    const nextSection = selectedSections[currentIndex + 1];
+                    navigate(`/dashboard/finalize/${nextSection}`, {
+                        state: { selectedSections }
+                    });
+                } else {
+                    // If education is the last section, navigate to congrats page
+                    navigate("/dashboard/finalize/congrats");
+                }
+            } else {
+                console.warn("Unexpected response:", response);
+                setError("Unexpected error occurred!");
             }
-          );
-      
-          if (response.status === 201) {
-            console.log("Education data submitted successfully!");
-            alert("Education details submitted successfully!");
-            navigate("/dashboard/education/summary"); // Navigate after successful submission
-          } else {
-            console.warn("Unexpected response:", response);
-            setError("Unexpected error occurred!");
-          }
         } catch (error) {
-          console.error("Error submitting education data:", error);
-          setError(
-            error.response?.data?.error ||
-              "Error submitting education data. Please try again."
-          );
+            console.error("Error submitting education data:", error);
+            setError(
+                error.response?.data?.error ||
+                "Error submitting education data. Please try again."
+            );
         } finally {
-          setLoading(false);
+            setLoading(false);
         }
-      };
+    };
       
 
     return (
@@ -196,7 +210,7 @@ const EducationSection = () => {
                     <button type="button" onClick={() => navigate("/dashboard/education/summary")}>
                         Cancel
                     </button>
-                    <button type="submit">{isNewEntry ? "Add Education" : "Save Changes"}</button>
+                    <button type="submit" onClick={handleFormSubmit}>{isNewEntry ? "Add Education" : "Save Changes"}</button>
                 </div>
             </form>
 

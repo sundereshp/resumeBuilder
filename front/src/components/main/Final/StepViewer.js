@@ -1,65 +1,54 @@
+
 import React, { useEffect, useMemo } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import PersonalDetails from './section/personalDetails'
+import Certifications from './section/certification'
+import Language from './section/language'
+import Hobbies from './section/hobbies'
 
-const sectionContent = {
-  'personalDetails': <p>Fill in your name, contact info, and address.</p>,
-  'websites': <p>Add links to your GitHub, LinkedIn, or personal site.</p>,
-  'certifications': <p>List certifications you've earned.</p>,
-  'language': <p>Mention languages you speak or write.</p>,
-  'accomplishment': <p>Highlight your notable achievements.</p>,
-  'additionalInfo': <p>Any extra info that adds value.</p>,
-  'affiliation': <p>Clubs, memberships, or professional affiliations.</p>
+const sectionComponents = {
+  'personalDetails': PersonalDetails,
+  'certifications': Certifications,
+  'language': Language,
+  'hobbies': Hobbies,
 }
 
-const readableNameMap = {
-  personalDetails: 'Personal details',
-  websites: 'Website,Portfolios,Profiles',
-  certifications: 'Certifications',
-  language: 'Language',
-  accomplishment: 'Accomplishment',
-  additionalInfo: 'Additional Information',
-  affiliation: 'Affiliation'
-}
-
-const StepViewer = () => {
+function StepViewer() {
+  const location = useLocation()
   const navigate = useNavigate()
   const { section } = useParams()
-  const location = useLocation()
+
   const selectedSections = useMemo(() => {
     return location.state?.selectedSections || []
   }, [location.state])
 
+  const currentIndex = selectedSections.indexOf(section)
+  const nextSection = selectedSections[currentIndex + 1]
+
+  const SectionComponent = sectionComponents[section]
+
   useEffect(() => {
-    if (!selectedSections.length || !sectionContent[section]) {
+    if (!selectedSections.length || !SectionComponent) {
       navigate('/dashboard/finalize/congrats')
     }
-  }, [selectedSections, section, navigate])
-
-  const currentIndex = selectedSections.findIndex(
-    s => s === readableNameMap[section]
-  )
+  }, [selectedSections, section, navigate, SectionComponent])
 
   const handleNext = () => {
-    if (currentIndex + 1 < selectedSections.length) {
-      const nextReadable = selectedSections[currentIndex + 1]
-      const nextKey = Object.keys(readableNameMap).find(
-        key => readableNameMap[key] === nextReadable
-      )
-      navigate(`/dashboard/finalize/${nextKey}`, { state: { selectedSections } })
+    if (nextSection) {
+      navigate(`/dashboard/finalize/${nextSection}`, {
+        state: { selectedSections }
+      })
     } else {
       navigate('/dashboard/finalize/congrats')
     }
   }
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '600px', margin: 'auto' }}>
-      <h2>Step {currentIndex + 1} of {selectedSections.length}</h2>
-      <h3>{readableNameMap[section]}</h3>
-      <div style={{ marginTop: '1rem' }}>
-        {sectionContent[section]}
-      </div>
+    <div style={{ padding: '2rem' }}>
+      {SectionComponent ? <SectionComponent /> : <p>Loading...</p>}
+
       <button onClick={handleNext} style={{ marginTop: '2rem' }}>
-        {currentIndex + 1 === selectedSections.length ? 'Finish' : 'Next'}
+        {nextSection ? 'Next' : 'Finish'}
       </button>
     </div>
   )

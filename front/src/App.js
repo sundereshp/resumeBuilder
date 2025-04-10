@@ -46,7 +46,6 @@ const App = () => {
           <Route path="summary/*" element={<Summary />} />
           <Route path="finalize/*" element={<Final />} />
 
-          {/* Other routes */}
         </Route>
 
       </Routes>
